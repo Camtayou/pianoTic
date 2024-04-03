@@ -19,17 +19,19 @@ open class Touche(val colonne: Int) {
 }
 
 // Définition de la classe TouchePiano qui hérite de la classe Touche
-class TouchePianoBasique(colonne: Int, val piano: Piano) : Touche(colonne) {
+class TouchePianoBasique(colonne: Int, val mainActivity: MainActivity, val piano : Piano) : Touche(colonne) {
     // Méthode pour gérer l'action de presser la touche
     fun presser(touche: ImageView) {
+         // Debug message
         disparaitre(touche) // Faire disparaître la touche après qu'elle ait été pressée
     }
 
     // Méthode pour faire disparaître la touche du piano
     fun disparaitre(touche: ImageView) {
-        piano.retirerTouche(this) // On demande au piano de retirer cette touche
-        touche.clearAnimation() // Arrêtez l'animation
-        touche.visibility = View.GONE // Cachez la touche
+        piano.retirerTouche(this)
+        mainActivity.retirerToucheMap(touche)
+        touche.clearAnimation()
+        touche.visibility = View.GONE
     }
 }
 
@@ -52,6 +54,7 @@ class Piano {
 
     // Méthode pour presser une touche du piano
     fun presserTouche(index: Int, touche: ImageView) {
+
         touches[index].presser(touche) // On presse la touche à l'index spécifié
     }
 }
