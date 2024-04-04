@@ -19,36 +19,42 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-            <ImageView
-                android:id="@+id/touche1"
+            <LinearLayout
+                android:id="@+id/pianoKeyContainer1"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:src="@drawable/touchepiano1"
-                android:layout_margin="3dp"/> <!-- Remplacez par votre image de touche de piano -->
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+            </LinearLayout>
+
+
+
         </LinearLayout>
         <LinearLayout android:id="@+id/Colonne2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-            <ImageView
-                android:id="@+id/touche2"
+            <LinearLayout
+                android:id="@+id/pianoKeyContainer2"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:src="@drawable/touchepiano1"
-                android:layout_margin="3dp"/> <!-- Remplacez par votre image de touche de piano -->
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+            </LinearLayout>
         </LinearLayout><LinearLayout
         android:id="@+id/Colonne3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
-        <ImageView
-            android:id="@+id/touche3"
+        <LinearLayout
+            android:id="@+id/pianoKeyContainer3"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:src="@drawable/touchepiano1"
-            android:layout_margin="3dp"/> <!-- Remplacez par votre image de touche de piano -->
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+        </LinearLayout>
     </LinearLayout><LinearLayout
         android:id="@+id/Colonne4"
         android:layout_width="0dp"
@@ -56,17 +62,14 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/touche4"
+        <LinearLayout
+            android:id="@+id/pianoKeyContainer4"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:src="@drawable/touchepiano1"
-            android:layout_margin="3dp"/> <!-- Remplacez par votre image de touche de piano -->
-
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+        </LinearLayout>
 
 
     </LinearLayout>
     </LinearLayout>
-
-
-</LinearLayout>
