@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:weightSum="2"
+
+    >
+    <Button
+        android:id="@+id/btn_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Pause"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="20sp"/>
+    <Button
+        android:id="@+id/btn_arriere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reour_accueil"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="20sp"/>
+
+
+</LinearLayout>
