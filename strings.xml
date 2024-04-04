@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">PianoTiles</string>
+    <string name="btn_play">Play</string>
+    <string name="Pause">Resume</string>
+    <string name="Score">Score</string>
+    <string name="play_time">Temps</string>
+    <string name="titre_music1">TakeOff</string>
+    <string name="titre_music2">Sans efforts</string>
+    <string name="titre_music3">Gazo</string>
+    <string name="ChoixMusics">Titres dispo :</string>
+    <string name="choix_titre">Select</string>
+    <string name="reour_accueil">Home</string>
+</resources>
