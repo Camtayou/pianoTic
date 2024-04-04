@@ -1,0 +1,40 @@
+package com.example.pianotiles
+
+import android.animation.ObjectAnimator
+import android.content.Context
+import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatImageView
+import android.view.ViewGroup.LayoutParams
+import android.view.ViewTreeObserver
+import android.view.ViewGroup
+
+open class PianoKey(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, var keyWidth: Int, var keyHeight: Int, var keyImageResource: Int, var position_Y: Float, var vitesse: Float) : AppCompatImageView(context, attrs, defStyleAttr) {
+    val scale = context.resources.displayMetrics.density
+    val params = LayoutParams((keyWidth * scale + 0.5f).toInt(), (keyHeight * scale + 0.5f).toInt())
+
+    init {
+        this.setImageResource(keyImageResource)
+        this.layoutParams = params
+        setPianoKeyListener()
+
+        this.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val width = this@PianoKey.width
+                this@PianoKey.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
+
+    open fun setPianoKeyListener() {
+        this.setOnClickListener {
+            (this@PianoKey.parent as ViewGroup).removeView(this@PianoKey)
+        }
+    }
+
+    fun startPianoKeyAnimation() {
+        val animator = ObjectAnimator.ofFloat(this, "translationY", position_Y, position_Y + vitesse)
+        animator.duration = 10000 // in milliseconds
+        animator.start()
+    }
+}
