@@ -7,8 +7,22 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import android.widget.LinearLayout
+import androidx.lifecycle.ViewModelProvider
+import android.widget.TextView
+
+import android.widget.Chronometer
+import android.widget.FrameLayout
+import android.widget.RelativeLayout
+import androidx.lifecycle.ViewModel
+import java.util.TimerTask
+import java.util.Timer
+// import androidx.lifecycle.viewmodel.compose.viewModel
 
 open class Fragmentingame : Fragment() {
+    //lateinit var stopwatch: Chronometer
+    private var compteur = 0
+    private lateinit var timerViewModel: TimerViewModel
+    private lateinit var tvTime: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,28 +37,40 @@ open class Fragmentingame : Fragment() {
                 ?.commit()
         }
 
-        val pianoKeyContainer1 = view.findViewById<LinearLayout>(R.id.pianoKeyContainer1)
-        val pianoKeyContainer2 = view.findViewById<LinearLayout>(R.id.pianoKeyContainer2)
-        val pianoKeyContainer3 = view.findViewById<LinearLayout>(R.id.pianoKeyContainer3)
-        val pianoKeyContainer4 = view.findViewById<LinearLayout>(R.id.pianoKeyContainer4)
 
-        // Créez des instances de PianoKey avec les dimensions et les ressources d'image souhaitées
-        var pianoKey1 = PianoKey(requireContext(), null, 0, 100, 100, R.drawable.touchepiano1, 20f, 500f)
-        var pianoKey2 = PianoKey(requireContext(), null, 0, 100, 100, R.drawable.touchepiano1, 20f, 200f)
-        var pianoKey3 = PianoKey(requireContext(), null, 0, 100, 100, R.drawable.touchepiano1, 20f, 100f)
-        var pianoKey4 = PianoKey(requireContext(), null, 0, 100, 100, R.drawable.touchepiano1, 20f, 1000f)
 
-        // Ajoutez les objets PianoKey au LinearLayout
-        pianoKeyContainer1.addView(pianoKey1)
-        pianoKeyContainer2.addView(pianoKey2)
-        pianoKeyContainer3.addView(pianoKey3)
-        pianoKeyContainer4.addView(pianoKey4)
+        val pianoKeyContainer1 = view.findViewById<RelativeLayout>(R.id.pianoKeyContainer1)
+        val pianoKeyContainer2 = view.findViewById<RelativeLayout>(R.id.pianoKeyContainer2)
+        val pianoKeyContainer3 = view.findViewById<RelativeLayout>(R.id.pianoKeyContainer3)
+        val pianoKeyContainer4 = view.findViewById<RelativeLayout>(R.id.pianoKeyContainer4)
 
-        // Lancez l'animation pour chaque touche de piano
-        pianoKey1.startPianoKeyAnimation()
-        pianoKey2.startPianoKeyAnimation()
-        pianoKey3.startPianoKeyAnimation()
-        pianoKey4.startPianoKeyAnimation()
+
+
+        // Code pour le chronomètre
+        tvTime = view.findViewById<TextView>(R.id.tv_time)
+
+        timerViewModel = ViewModelProvider(this).get(TimerViewModel::class.java)
+
+        timerViewModel.timer.observe(viewLifecycleOwner, { time ->
+            tvTime.text = "Time : " +((time - time % 60) / 60).toString() + " : " + (time % 60).toString()
+        })
+
+        timerViewModel.startTimer()
+
+
+
+        // Code pour génerer les touches de piano
+
+        val pianoKeyContainers = listOf(
+            view.findViewById<RelativeLayout>(R.id.pianoKeyContainer1),
+            view.findViewById<RelativeLayout>(R.id.pianoKeyContainer2),
+            view.findViewById<RelativeLayout>(R.id.pianoKeyContainer3),
+            view.findViewById<RelativeLayout>(R.id.pianoKeyContainer4)
+        )
+
+        val pianoKeyManager = PianoKeyManager(requireContext(), pianoKeyContainers)
+        pianoKeyManager.startGeneratingPianoKeys()
+
 
         return view
     }
