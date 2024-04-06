@@ -6,9 +6,11 @@
     android:layout_height="match_parent"
     android:weightSum="2">
 
+
+
     <TextView
         android:id="@+id/tv_time"
-        android:text= "@string/play_time"
+        android:text= "@{Fragmentingame.temps_actuel}"
         android:textStyle="bold"
         android:gravity="center"
         android:layout_width="match_parent"
