@@ -7,10 +7,12 @@ import androidx.appcompat.widget.AppCompatImageView
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewTreeObserver
 import android.view.ViewGroup
+import android.animation.ValueAnimator
 
 open class PianoKey(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, var keyWidth: Int, var keyHeight: Int, var keyImageResource: Int, var position_Y: Float, var vitesse: Float) : AppCompatImageView(context, attrs, defStyleAttr) {
     val scale = context.resources.displayMetrics.density
     val params = LayoutParams((keyWidth * scale + 0.5f).toInt(), (keyHeight * scale + 0.5f).toInt())
+    private val animator: ValueAnimator
 
     init {
         this.setImageResource(keyImageResource)
@@ -24,7 +26,15 @@ open class PianoKey(context: Context, attrs: AttributeSet? = null, defStyleAttr:
                 this@PianoKey.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
+        animator = ValueAnimator.ofFloat(0f, 1f).apply {
+            this.duration = duration.toLong()
+            addUpdateListener { animation ->
+                val progress = animation.animatedValue as Float
+                translationY = height * progress
+            }
+        }
     }
+
 
     open fun setPianoKeyListener() {
         this.setOnClickListener {
