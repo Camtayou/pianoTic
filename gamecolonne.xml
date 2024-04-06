@@ -19,13 +19,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/pianoKeyContainer1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 xmlns:android="http://schemas.android.com/apk/res/android">
-            </LinearLayout>
+            </RelativeLayout>
 
 
 
@@ -35,26 +34,24 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/pianoKeyContainer2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 xmlns:android="http://schemas.android.com/apk/res/android">
-            </LinearLayout>
+            </RelativeLayout>
         </LinearLayout><LinearLayout
         android:id="@+id/Colonne3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/pianoKeyContainer3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             xmlns:android="http://schemas.android.com/apk/res/android">
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout><LinearLayout
         android:id="@+id/Colonne4"
         android:layout_width="0dp"
@@ -62,14 +59,14 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/pianoKeyContainer4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             xmlns:android="http://schemas.android.com/apk/res/android">
-        </LinearLayout>
+        </RelativeLayout>
 
 
     </LinearLayout>
     </LinearLayout>
+</LinearLayout>
