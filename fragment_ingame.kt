@@ -23,6 +23,8 @@ open class Fragmentingame : Fragment() {
     private var compteur = 0
     private lateinit var timerViewModel: TimerViewModel
     private lateinit var tvTime: TextView
+    private lateinit var scoreViewModel: ScoreViewModel
+    private lateinit var tvScore: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,11 +69,28 @@ open class Fragmentingame : Fragment() {
             view.findViewById<RelativeLayout>(R.id.pianoKeyContainer3),
             view.findViewById<RelativeLayout>(R.id.pianoKeyContainer4)
         )
+        scoreViewModel = ViewModelProvider(this).get(ScoreViewModel::class.java)
 
-        val pianoKeyManager = PianoKeyManager(requireContext(), pianoKeyContainers)
+        val pianoKeyManager = PianoKeyManager(requireContext(), pianoKeyContainers, scoreViewModel )
         pianoKeyManager.startGeneratingPianoKeys()
+
+        tvScore = view.findViewById(R.id.tv_score)
+
+        scoreViewModel.startScoreTimer()
 
 
         return view
+    }
+    override fun onResume() {
+        super.onResume()
+
+        // Update the score every second
+        Timer().scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                activity?.runOnUiThread {
+                    tvScore.text = "Score : " + scoreViewModel.score.toString()
+                }
+            }
+        }, 0, 1000)
     }
 }
