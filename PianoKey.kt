@@ -8,11 +8,24 @@ import android.view.ViewGroup.LayoutParams
 import android.view.ViewTreeObserver
 import android.view.ViewGroup
 import android.animation.ValueAnimator
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 
-open class PianoKey(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, var keyWidth: Int, var keyHeight: Int, var keyImageResource: Int, var position_Y: Float, var vitesse: Float) : AppCompatImageView(context, attrs, defStyleAttr) {
+
+open class PianoKey(context: Context,
+                    attrs: AttributeSet? = null,
+                    defStyleAttr: Int = 0,
+                    var keyWidth: Int,
+                    var keyHeight: Int,
+                    var keyImageResource: Int,
+                    var position_Y: Float,
+                    var vitesse: Float,
+                    private val scoreViewModel: ScoreViewModel
+    ) : AppCompatImageView(context, attrs, defStyleAttr) {
     val scale = context.resources.displayMetrics.density
     val params = LayoutParams((keyWidth * scale + 0.5f).toInt(), (keyHeight * scale + 0.5f).toInt())
     private val animator: ValueAnimator
+
 
     init {
         this.setImageResource(keyImageResource)
@@ -39,6 +52,7 @@ open class PianoKey(context: Context, attrs: AttributeSet? = null, defStyleAttr:
     open fun setPianoKeyListener() {
         this.setOnClickListener {
             (this@PianoKey.parent as ViewGroup).removeView(this@PianoKey)
+            scoreViewModel.incrementScore() // Utilisez la méthode incrementScore() pour augmenter le score
         }
     }
 
