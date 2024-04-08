@@ -20,12 +20,11 @@ open class PianoKey(context: Context,
                     var keyImageResource: Int,
                     var position_Y: Float,
                     var vitesse: Float,
-                    private val scoreViewModel: ScoreViewModel
-    ) : AppCompatImageView(context, attrs, defStyleAttr) {
+                    private val scoreViewModel: ScoreViewModel,
+                    private var animator: ObjectAnimator? = null
+) : AppCompatImageView(context, attrs, defStyleAttr) {
     val scale = context.resources.displayMetrics.density
     val params = LayoutParams((keyWidth * scale + 0.5f).toInt(), (keyHeight * scale + 0.5f).toInt())
-    private val animator: ValueAnimator
-
 
     init {
         this.setImageResource(keyImageResource)
@@ -39,15 +38,7 @@ open class PianoKey(context: Context,
                 this@PianoKey.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
-        animator = ValueAnimator.ofFloat(0f, 1f).apply {
-            this.duration = duration.toLong()
-            addUpdateListener { animation ->
-                val progress = animation.animatedValue as Float
-                translationY = height * progress
-            }
-        }
     }
-
 
     open fun setPianoKeyListener() {
         this.setOnClickListener {
@@ -57,8 +48,22 @@ open class PianoKey(context: Context,
     }
 
     fun startPianoKeyAnimation() {
-        val animator = ObjectAnimator.ofFloat(this, "translationY", position_Y, position_Y + vitesse)
-        animator.duration = 10000 // in milliseconds
-        animator.start()
+        animator = ObjectAnimator.ofFloat(this, "translationY", position_Y, position_Y + vitesse)
+        animator?.duration = 10000 // in milliseconds
+        animator?.start()
+    }
+    fun pause() {
+        animator?.pause()
+    }
+
+    fun resume() {
+        animator?.resume()
+    }
+    fun disableClick() {
+        this.isClickable = false
+    }
+
+    fun enableClick() {
+        this.isClickable = true
     }
 }
