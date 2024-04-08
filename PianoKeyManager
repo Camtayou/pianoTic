@@ -8,7 +8,9 @@ import kotlin.random.Random
 import android.widget.RelativeLayout
 
 
-class PianoKeyManager(private val context: Context, private val pianoKeyContainers: List<RelativeLayout>) {
+class PianoKeyManager(private val context: Context,
+                      private val pianoKeyContainers: List<RelativeLayout>,
+                      private val scoreViewModel: ScoreViewModel) {
     private val handler = Handler(Looper.getMainLooper())
     private var lastColumnIndex = -1
 
@@ -35,13 +37,22 @@ class PianoKeyManager(private val context: Context, private val pianoKeyContaine
         lastColumnIndex = randomColumnIndex
 
         val pianoKeyContainer = pianoKeyContainers[randomColumnIndex] as RelativeLayout
-        val pianoKey = PianoKey(context, null, 0, 100, 100, R.drawable.touchepiano1, -1000f, 3000f)
-        val params = RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.WRAP_CONTENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT
-        )
+        val pianoKey = PianoKey(context, null, 0, 100, 100, R.drawable.touchepiano1, -1000f, 3000f, scoreViewModel)
+
+        // Get the height and width from the PianoKey instance
+        val keyHeight = pianoKey.keyHeight
+        val keyWidth = pianoKey.keyWidth
+
+        // Convert the height and width to pixels
+        val scale = context.resources.displayMetrics.density
+        val heightInPx = (keyHeight * scale + 0.5f).toInt()
+        val widthInPx = (keyWidth * scale + 0.5f).toInt()
+
+        // Use the height and width to set the RelativeLayout.LayoutParams
+        val params = RelativeLayout.LayoutParams(widthInPx, heightInPx)
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP)
         pianoKey.layoutParams = params
+
         pianoKeyContainer.addView(pianoKey)
         pianoKey.startPianoKeyAnimation()
     }
