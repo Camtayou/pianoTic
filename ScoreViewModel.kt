@@ -29,5 +29,14 @@ class ScoreViewModel : ViewModel() {
         timer?.cancel()
     }
 
-    
+    fun pauseScoreTimer() {
+        timer?.cancel()
+        timer = null
+    }
+
+    fun resumeScoreTimer() {
+        startScoreTimer()
+    }
+
+
 }
