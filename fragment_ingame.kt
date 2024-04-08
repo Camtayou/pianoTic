@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
 import android.widget.TextView
-
+import android.media.MediaPlayer
 import android.widget.Chronometer
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
@@ -25,6 +25,9 @@ open class Fragmentingame : Fragment() {
     private lateinit var tvTime: TextView
     private lateinit var scoreViewModel: ScoreViewModel
     private lateinit var tvScore: TextView
+    private var mediaPlayer: MediaPlayer? = null
+    private lateinit var pianoKeyManager: PianoKeyManager
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,6 +81,26 @@ open class Fragmentingame : Fragment() {
 
         scoreViewModel.startScoreTimer()
 
+        // Créez et démarrez le MediaPlayer
+        mediaPlayer = MediaPlayer.create(context, R.raw.takeoff)
+        mediaPlayer?.start()
+
+        // Mettre en pause et reprendre le jeu
+        val btnPause = view.findViewById<Button>(R.id.btn_pause)
+        btnPause.setOnClickListener {
+            if (pianoKeyManager.isGameRunning) {
+                pianoKeyManager.pauseGame()
+                mediaPlayer?.pause()
+                timerViewModel.pauseTimer()
+                scoreViewModel.pauseScoreTimer()
+            } else {
+                pianoKeyManager.resumeGame()
+                mediaPlayer?.start()
+                timerViewModel.resumeTimer()
+                scoreViewModel.resumeScoreTimer()
+            }
+        }
+
 
         return view
     }
@@ -92,5 +115,12 @@ open class Fragmentingame : Fragment() {
                 }
             }
         }, 0, 1000)
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // Libérez la ressource lorsque vous avez terminé avec elle
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 }
