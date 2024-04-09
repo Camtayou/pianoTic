@@ -10,4 +10,5 @@
     <string name="ChoixMusics">Titres dispo :</string>
     <string name="choix_titre">Select</string>
     <string name="reour_accueil">Home</string>
+    <string name="gameover">GAME OVER</string>
 </resources>
