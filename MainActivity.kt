@@ -9,9 +9,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import androidx.fragment.app.FragmentManager
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), GameOverListener {
     private lateinit var fragmentContainer: FragmentContainerView
     private lateinit var fragmentManager: FragmentManager
+    private lateinit var gameOverFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         fragmentContainer = findViewById(R.id.fragment_container_view_tag)
         fragmentManager = supportFragmentManager
+        gameOverFragment = gameover() as Fragment
 
         // Add Fragment First to the container initially (if no savedInstanceState)
         if (savedInstanceState == null) {
@@ -27,4 +29,17 @@ class MainActivity : AppCompatActivity() {
             transaction.commit()
         }
     }
+    override fun onGameOver() {
+        showGameOverScreen()
+    }
+    fun showGameOverScreen() {
+        // Arrêtez le jeu
+        // Remplacez par votre propre logique pour arrêter le jeu
+
+        // Affichez l'écran de fin de partie
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container_view_tag, gameover())
+        transaction.commit()
+    }
+
 }
