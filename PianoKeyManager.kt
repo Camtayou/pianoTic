@@ -1,16 +1,15 @@
 package com.example.pianotiles
 import android.widget.LinearLayout
 import android.content.Context
-
 import android.os.Handler
 import android.os.Looper
 import kotlin.random.Random
 import android.widget.RelativeLayout
 
-
 class PianoKeyManager(private val context: Context,
                       private val pianoKeyContainers: List<RelativeLayout>,
                       private val scoreViewModel: ScoreViewModel,
+                      private val gameOverListener: GameOverListener,
                       private val pianoKeys: MutableList<PianoKey> = mutableListOf()) {
     private val handler = Handler(Looper.getMainLooper())
     private var lastColumnIndex = -1
@@ -65,22 +64,61 @@ class PianoKeyManager(private val context: Context,
             lastColumnIndex = randomColumnIndex
 
             val pianoKeyContainer = pianoKeyContainers[randomColumnIndex] as RelativeLayout
-            val pianoKey = PianoKey(
-                context,
-                null,
-                0,
-                100,
-                100,
-                R.drawable.touchepiano1,
-                -1000f,
-                3000f,
-                scoreViewModel
-            )
+
+            // Créer une instance de l'une des trois sous-classes en fonction d'un nombre aléatoire
+            val pianoKey = when (Random.nextInt(10)) {
+                in 0..6 -> pianokey_classic(
+                    context,
+                    null,
+                    0,
+                    100,
+                    -1000f,
+                    3000f,
+                    scoreViewModel,
+                    null,
+                    100, // Remplacez par la hauteur de la touche pour pianokey_classic
+                    R.drawable.touchepiano1, // Remplacez par la ressource d'image pour pianokey_classic
+                    gameOverListener // Pass MainActivity as GameOverListener
+                )
+                in 7..8 -> pianokey_long(
+                    context,
+                    null,
+                    0,
+                    100,
+                    -1000f,
+                    3000f,
+                    scoreViewModel,
+                    null,
+                    200, // Remplacez par la hauteur de la touche pour pianokey_long
+                    R.drawable.touchepiano2, // Remplacez par la ressource d'image pour pianokey_long
+                    gameOverListener // Pass MainActivity as GameOverListener
+                )
+                else -> pianokey_special(
+                    context,
+                    null,
+                    0,
+                    100,
+                    -1000f,
+                    3000f,
+                    scoreViewModel,
+                    null,
+                    150, // Remplacez par la hauteur de la touche pour pianokey_special
+                    R.drawable.touchepiano3, // Remplacez par la ressource d'image pour pianokey_special
+                    gameOverListener // Pass MainActivity as GameOverListener
+                )
+            }
+
             // Pour lorsqu'on est en pause
             pianoKeys.add(pianoKey)
 
             // Get the height and width from the PianoKey instance
-            val keyHeight = pianoKey.keyHeight
+            val keyHeight = when (pianoKey) {
+                is pianokey_classic -> pianoKey.keyHeight
+                is pianokey_long -> pianoKey.keyHeight
+                is pianokey_special -> pianoKey.keyHeight
+                else -> throw IllegalArgumentException("Invalid piano key type")
+            }
+
             val keyWidth = pianoKey.keyWidth
 
             // Convert the height and width to pixels
@@ -97,5 +135,4 @@ class PianoKeyManager(private val context: Context,
             pianoKey.startPianoKeyAnimation()
         }
     }
-
 }
