@@ -18,7 +18,7 @@ import java.util.TimerTask
 import java.util.Timer
 // import androidx.lifecycle.viewmodel.compose.viewModel
 
-open class Fragmentingame : Fragment() {
+open class Fragmentingame : Fragment(), GameOverListener {
     //lateinit var stopwatch: Chronometer
     private var compteur = 0
     private lateinit var timerViewModel: TimerViewModel
@@ -74,7 +74,7 @@ open class Fragmentingame : Fragment() {
         )
         scoreViewModel = ViewModelProvider(this).get(ScoreViewModel::class.java)
 
-        val pianoKeyManager = PianoKeyManager(requireContext(), pianoKeyContainers, scoreViewModel )
+        val pianoKeyManager = PianoKeyManager(requireContext(), pianoKeyContainers, scoreViewModel, this )
         pianoKeyManager.startGeneratingPianoKeys()
 
         tvScore = view.findViewById(R.id.tv_score)
@@ -103,6 +103,12 @@ open class Fragmentingame : Fragment() {
 
 
         return view
+    }
+    override fun onGameOver() {
+        // Remplacez par votre propre logique pour gérer l'événement de fin de partie
+        fragmentManager?.beginTransaction()
+            ?.replace(R.id.fragment_container_view_tag, gameover())
+            ?.commit()
     }
     override fun onResume() {
         super.onResume()
