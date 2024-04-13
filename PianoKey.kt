@@ -17,39 +17,42 @@ open class PianoKey(context: Context,
                     attrs: AttributeSet? = null,
                     defStyleAttr: Int = 0,
                     var keyWidth: Int,
+                    var keyHeight: Int,
+                    var keyImageResource: Int,
                     var position_Y: Float,
                     var vitesse: Float,
-                    private val scoreViewModel: ScoreViewModel,
+                    val scoreViewModel: ScoreViewModel,
                     private var animator: ObjectAnimator? = null,
                     private val gameOverListener: GameOverListener,
-                    var clicksRequired: Int,
-                    var soundResource: Int
-) : AppCompatImageView(context, attrs, defStyleAttr) {
+) : AppCompatImageView(context, attrs, defStyleAttr), IncrementScore {
     val scale = context.resources.displayMetrics.density
-    private var mediaPlayer: MediaPlayer? = null
+    protected var mediaPlayer: MediaPlayer? = null
+    val params = LayoutParams((keyWidth * scale + 0.5f).toInt(), (keyHeight * scale + 0.5f).toInt())
+    init {
+        this.setImageResource(keyImageResource)
+        this.layoutParams = params
+        setPianoKeyListener()
 
+        this.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val width = this@PianoKey.width
+                this@PianoKey.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
+    override fun AddScore() {
+         scoreViewModel.score += 10
+    }
 
     open fun setPianoKeyListener() {
         this.setOnClickListener {
-            clicksRequired--
-            if (clicksRequired <= 0) {
-                (this@PianoKey.parent as ViewGroup).removeView(this@PianoKey)
-                scoreViewModel.incrementScore() // Utilisez la méthode incrementScore() pour augmenter le score
-            }
-            // Jouer le son
-            mediaPlayer?.release()
-            mediaPlayer = MediaPlayer.create(context, soundResource)
-            mediaPlayer?.setOnCompletionListener { mp ->
-                mp.release()
-            }
-            mediaPlayer?.start()
+
+            (this@PianoKey.parent as ViewGroup).removeView(this@PianoKey)
+            AddScore()
         }
     }
 
-    fun releaseMediaPlayer() {
-        mediaPlayer?.release()
-        mediaPlayer = null
-    }
 
     fun startPianoKeyAnimation() {
         animator = ObjectAnimator.ofFloat(this, "translationY", position_Y, position_Y + vitesse)
@@ -81,61 +84,32 @@ open class PianoKey(context: Context,
     }
 }
 
-open class pianokey_classic(context: Context,
-                            attrs: AttributeSet? = null,
-                            defStyleAttr: Int = 0,
-                            keyWidth: Int,
-                            position_Y: Float,
-                            vitesse: Float,
-                            scoreViewModel: ScoreViewModel,
-                            animator: ObjectAnimator? = null,
-                            open var keyHeight: Int,
-                            var keyImageResource: Int,
-                            gameOverListener: GameOverListener,
-                            clicksRequired: Int = 1
-) : PianoKey(context, attrs, defStyleAttr, keyWidth, position_Y, vitesse, scoreViewModel, animator, gameOverListener, clicksRequired, R.raw.sonpiano1) {
-    val params = LayoutParams((keyWidth * scale + 0.5f).toInt(), (keyHeight * scale + 0.5f).toInt())
-    init {
-        this.setImageResource(keyImageResource)
-        this.layoutParams = params
-        setPianoKeyListener()
-
-        this.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val width = this@pianokey_classic.width
-                this@pianokey_classic.viewTreeObserver.removeOnGlobalLayoutListener(this)
-            }
-        })
-    }
-}
 
 open class pianokey_long(context: Context,
                          attrs: AttributeSet? = null,
                          defStyleAttr: Int = 0,
                          keyWidth: Int,
+                         keyHeight: Int,
+                         keyImageResource: Int,
                          position_Y: Float,
                          vitesse: Float,
                          scoreViewModel: ScoreViewModel,
                          animator: ObjectAnimator? = null,
-                         open var keyHeight: Int,
-                         var keyImageResource: Int,
                          gameOverListener : GameOverListener,
-                         clicksRequired: Int = 2
-) : PianoKey(context, attrs, defStyleAttr, keyWidth, position_Y, vitesse, scoreViewModel, animator, gameOverListener, clicksRequired, R.raw.sonpiano2) {
-    val params = LayoutParams((keyWidth * scale + 0.5f).toInt(), (keyHeight * scale + 0.5f).toInt())
-    init {
-        this.setImageResource(keyImageResource)
-        this.layoutParams = params
-        setPianoKeyListener()
-
-        this.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val width = this@pianokey_long.width
-                this@pianokey_long.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                         var clicksRequired: Int,
+                         ) : PianoKey(context, attrs, defStyleAttr, keyWidth,keyHeight,
+    keyImageResource, position_Y, vitesse, scoreViewModel, animator, gameOverListener) {
+    override fun setPianoKeyListener() {
+        this.setOnClickListener {
+        clicksRequired--
+            if (clicksRequired == 0) {
+                (this@pianokey_long.parent as ViewGroup).removeView(this@pianokey_long)
+                AddScore()
             }
-        })
+        }
+    }
+    override fun AddScore() {
+        scoreViewModel.score += 30
     }
 }
 
@@ -144,26 +118,30 @@ open class pianokey_special(context: Context,
                             defStyleAttr: Int = 0,
                             keyWidth: Int,
                             position_Y: Float,
+                            keyHeight: Int,
+                            keyImageResource: Int,
                             vitesse: Float,
                             scoreViewModel: ScoreViewModel,
                             animator: ObjectAnimator? = null,
-                            open var keyHeight: Int,
-                            var keyImageResource: Int,
                             gameOverListener: GameOverListener,
-                            clicksRequired: Int = 3
-) : PianoKey(context, attrs, defStyleAttr, keyWidth,position_Y, vitesse, scoreViewModel, animator, gameOverListener, clicksRequired, R.raw.sonpiano3) {
-    val params = LayoutParams((keyWidth * scale + 0.5f).toInt(), (keyHeight * scale + 0.5f).toInt())
-    init {
-        this.setImageResource(keyImageResource)
-        this.layoutParams = params
-        setPianoKeyListener()
+                            var soundResource: Int
+) : PianoKey(context, attrs, defStyleAttr, keyWidth, keyHeight,
+    keyImageResource,position_Y, vitesse, scoreViewModel, animator, gameOverListener) {
+    override fun setPianoKeyListener() {
+        this.setOnClickListener {
 
-        this.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val width = this@pianokey_special.width
-                this@pianokey_special.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            (this@pianokey_special.parent as ViewGroup).removeView(this@pianokey_special)
+            AddScore()
+            // Jouer le son
+            mediaPlayer?.release()
+            mediaPlayer = MediaPlayer.create(context, soundResource)
+            mediaPlayer?.setOnCompletionListener { mp ->
+                mp.release()
             }
-        })
+            mediaPlayer?.start()
+        }
+    }
+    override fun AddScore() {
+        scoreViewModel.score += 50
     }
 }
