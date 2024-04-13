@@ -1,0 +1,21 @@
+package com.example.pianotiles
+
+class PlayerStats {
+    companion object {
+        var totalScore: Int = 0
+        var totalPianoKeysPlayed: Int = 0
+        var totalTimePlayed: Int = 0
+
+        fun addScore(score: Int) {
+            totalScore += score
+        }
+        
+        fun addTime(time: Int) {
+            totalTimePlayed += time
+        }
+
+        fun addPianoKey() {
+            totalPianoKeysPlayed++
+        }
+    }
+}
