@@ -9,7 +9,7 @@ class PlayerStats {
         fun addScore(score: Int) {
             totalScore += score
         }
-        
+
         fun addTime(time: Int) {
             totalTimePlayed += time
         }
