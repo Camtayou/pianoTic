@@ -1,21 +1,14 @@
 package com.example.pianotiles
 
+import android.graphics.drawable.Drawable
+
 class PlayerStats {
     companion object {
         var totalScore: Int = 0
         var totalPianoKeysPlayed: Int = 0
         var totalTimePlayed: Int = 0
-
-        fun addScore(score: Int) {
-            totalScore += score
-        }
-
-        fun addTime(time: Int) {
-            totalTimePlayed += time
-        }
-
-        fun addPianoKey() {
-            totalPianoKeysPlayed++
-        }
+        var profilePhoto: Drawable? = null
+        var profileName: String? = null
     }
+
 }
