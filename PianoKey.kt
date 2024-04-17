@@ -8,6 +8,8 @@ import android.view.ViewGroup.LayoutParams
 import android.view.ViewTreeObserver
 import android.view.ViewGroup
 import android.media.MediaPlayer
+import com.example.pianotiles.PlayerStats.Companion
+
 
 import android.animation.ValueAnimator
 import androidx.fragment.app.FragmentActivity
@@ -18,16 +20,16 @@ open class PianoKey(context: Context,
                     defStyleAttr: Int = 0,
                     var keyWidth: Int,
                     var keyHeight: Int,
-                    var keyImageResource: Int,
-                    var position_Y: Float,
-                    var vitesse: Float,
-                    val scoreViewModel: ScoreViewModel,
+                    keyImageResource: Int,
+                    protected var position_Y: Float,
+                    protected var vitesse: Float,
+                    protected val scoreViewModel: ScoreViewModel,
                     private var animator: ObjectAnimator? = null,
                     private val gameOverListener: GameOverListener,
 ) : AppCompatImageView(context, attrs, defStyleAttr), IncrementScore {
-    val scale = context.resources.displayMetrics.density
-    protected var mediaPlayer: MediaPlayer? = null
-    val params = LayoutParams((keyWidth * scale + 0.5f).toInt(), (keyHeight * scale + 0.5f).toInt())
+    private val scale = context.resources.displayMetrics.density
+
+    private val params = LayoutParams((keyWidth * scale + 0.5f).toInt(), (keyHeight * scale + 0.5f).toInt())
     init {
         this.setImageResource(keyImageResource)
         this.layoutParams = params
@@ -42,7 +44,9 @@ open class PianoKey(context: Context,
         })
     }
     override fun AddScore() {
-         scoreViewModel.score += 10
+        val currentScore = scoreViewModel.score.value ?: 0
+        scoreViewModel.score.value = currentScore + 10
+        Companion.totalScore += 10
     }
 
     open fun setPianoKeyListener() {
@@ -50,6 +54,7 @@ open class PianoKey(context: Context,
 
             (this@PianoKey.parent as ViewGroup).removeView(this@PianoKey)
             AddScore()
+            Companion.totalPianoKeysPlayed++
         }
     }
 
@@ -85,7 +90,7 @@ open class PianoKey(context: Context,
 }
 
 
-open class pianokey_long(context: Context,
+class pianokey_long(context: Context,
                          attrs: AttributeSet? = null,
                          defStyleAttr: Int = 0,
                          keyWidth: Int,
@@ -96,7 +101,7 @@ open class pianokey_long(context: Context,
                          scoreViewModel: ScoreViewModel,
                          animator: ObjectAnimator? = null,
                          gameOverListener : GameOverListener,
-                         var clicksRequired: Int,
+                         private var clicksRequired: Int,
                          ) : PianoKey(context, attrs, defStyleAttr, keyWidth,keyHeight,
     keyImageResource, position_Y, vitesse, scoreViewModel, animator, gameOverListener) {
     override fun setPianoKeyListener() {
@@ -105,15 +110,18 @@ open class pianokey_long(context: Context,
             if (clicksRequired == 0) {
                 (this@pianokey_long.parent as ViewGroup).removeView(this@pianokey_long)
                 AddScore()
+                Companion.totalPianoKeysPlayed++
             }
         }
     }
     override fun AddScore() {
-        scoreViewModel.score += 30
+        val currentScore = scoreViewModel.score.value ?: 0
+        scoreViewModel.score.value = currentScore + 30
+        Companion.totalScore += 30
     }
 }
 
-open class pianokey_special(context: Context,
+class pianokey_special(context: Context,
                             attrs: AttributeSet? = null,
                             defStyleAttr: Int = 0,
                             keyWidth: Int,
@@ -124,9 +132,10 @@ open class pianokey_special(context: Context,
                             scoreViewModel: ScoreViewModel,
                             animator: ObjectAnimator? = null,
                             gameOverListener: GameOverListener,
-                            var soundResource: Int
+                            private var soundResource: Int
 ) : PianoKey(context, attrs, defStyleAttr, keyWidth, keyHeight,
     keyImageResource,position_Y, vitesse, scoreViewModel, animator, gameOverListener) {
+    private var mediaPlayer: MediaPlayer? = null
     override fun setPianoKeyListener() {
         this.setOnClickListener {
 
@@ -139,9 +148,50 @@ open class pianokey_special(context: Context,
                 mp.release()
             }
             mediaPlayer?.start()
+            Companion.totalPianoKeysPlayed++
         }
     }
     override fun AddScore() {
-        scoreViewModel.score += 50
+        val currentScore = scoreViewModel.score.value ?: 0
+        scoreViewModel.score.value = currentScore + 50
+        Companion.totalScore += 50
+
+
     }
 }
+
+
+/*
+decorateur : fonction qui appelle une autre fonction
+
+factory pattern :
+singleton : un seul objet de la classe peut exister, pas deux les mêmes
+
+
+Idée 1 pour observe :
+Lorsque le score atteint 1000, la classe scoreviewpdel va notifier un autre fragment Partie gagnée
+et le fragment va afficher un message de victoire
+
+Idée 2 pour observer :popup de points gagnés (Toast)
+
+Idée 3 pour observer (et singleton) :
+Page de connexion avec mot de passe et email, si le mot de passe est bon, on affiche un message de bienvenue
+pas de bouton a été bien écris, ça renvoie automatiquement à la homepage
+
+{{Idée 4 :  pour observer :
+Mot de passe observé lorsqu'on veut accéder aux stats}}
+
+Idée 1 pour singleton :
+Connexion à une base de données, un seul email unique, pas 2 emails identiques
+
+
+{{Idée 2 pour singleton :
+Créer un mot de passe de chiffre à chaque fois qu'on veut accéder aux stats}}
+
+
+Idée Prototype Pattern :
+On copie l'objet tyme pour le transformer en score et y
+
+
+
+*/
