@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
+import com.example.pianotiles.PlayerStats.Companion
 
 class TimerViewModel : ViewModel() {
     private val _timer = MutableLiveData<Int>(0)
@@ -20,6 +21,7 @@ class TimerViewModel : ViewModel() {
                 delay(1000)
                 val currentValue = _timer.value ?: 0
                 _timer.value = currentValue + 1
+                Companion.totalTimePlayed += 1
             }
         }
     }
