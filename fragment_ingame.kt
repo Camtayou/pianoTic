@@ -13,9 +13,11 @@ import android.media.MediaPlayer
 import android.widget.Chronometer
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import java.util.TimerTask
 import java.util.Timer
+import androidx.lifecycle.Observer
 // import androidx.lifecycle.viewmodel.compose.viewModel
 
 open class Fragmentingame : Fragment(), GameOverListener {
@@ -42,12 +44,6 @@ open class Fragmentingame : Fragment(), GameOverListener {
                 ?.commit()
         }
 
-
-
-        val pianoKeyContainer1 = view.findViewById<RelativeLayout>(R.id.pianoKeyContainer1)
-        val pianoKeyContainer2 = view.findViewById<RelativeLayout>(R.id.pianoKeyContainer2)
-        val pianoKeyContainer3 = view.findViewById<RelativeLayout>(R.id.pianoKeyContainer3)
-        val pianoKeyContainer4 = view.findViewById<RelativeLayout>(R.id.pianoKeyContainer4)
 
 
 
@@ -77,6 +73,12 @@ open class Fragmentingame : Fragment(), GameOverListener {
         val pianoKeyManager = PianoKeyManager(requireContext(), pianoKeyContainers, scoreViewModel, this )
         pianoKeyManager.startGeneratingPianoKeys()
 
+        // Observe the score
+        scoreViewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
+            // Mettez à jour l'interface utilisateur avec le nouveau score
+            tvScore.text = "Score : $newScore"
+        })
+
         tvScore = view.findViewById(R.id.tv_score)
 
         scoreViewModel.startScoreTimer()
@@ -101,6 +103,10 @@ open class Fragmentingame : Fragment(), GameOverListener {
             }
         }
 
+        // Pour le sombre
+
+
+
 
         return view
     }
@@ -117,7 +123,7 @@ open class Fragmentingame : Fragment(), GameOverListener {
         Timer().scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 activity?.runOnUiThread {
-                    tvScore.text = "Score : " + scoreViewModel.score.toString()
+                    tvScore.text = "Score : " + scoreViewModel.score.value.toString()
                 }
             }
         }, 0, 1000)
