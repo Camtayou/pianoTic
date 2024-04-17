@@ -11,4 +11,15 @@
     <string name="choix_titre">Select</string>
     <string name="reour_accueil">Home</string>
     <string name="gameover">GAME OVER</string>
+    <string name="Score_totale">Total Score : </string>
+    <string name="stats_time">Total Time : </string>
+    <string name="total_pianokey">Total Touches : </string>
+    <string name="titre_album">CHOIX DE PROFIL</string>
+    <string name="profilaffiche">Profil :</string>
+    <string name="profil1">Carmel</string>
+    <string name="profil2">Komil</string>
+    <string name="profil3">Gabriel</string>
+    <string name="profil4">Bersini</string>
+    <string name="choix_profil">Profil</string>
+    <string name="darkmodetext">Mode</string>
 </resources>
