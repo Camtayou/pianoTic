@@ -34,9 +34,6 @@ class PianoKeyManager(private val context: Context,
         }
     }
 
-    fun stopGeneratingPianoKeys() {
-        handler.removeCallbacks(runnable)
-    }
     fun pauseGame() {
         isGameRunning = false
         pianoKeys.forEach { pianoKey: PianoKey ->
