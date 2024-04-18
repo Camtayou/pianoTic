@@ -107,9 +107,17 @@ open class Fragmentingame : Fragment(), GameOverListener {
 
 
 
-
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Update the background color and text color based on the current dark mode state
+        val layout = view.findViewById<ViewGroup>(R.id.ingamepaccomplet)
+        DarkModeHandler().updateAllViews(DarkMode.isDarkMode, layout, requireContext())
+    }
+
     override fun onGameOver() {
         // Remplacez par votre propre logique pour gérer l'événement de fin de partie
         fragmentManager?.beginTransaction()
@@ -136,3 +144,4 @@ open class Fragmentingame : Fragment(), GameOverListener {
         mediaPlayer = null
     }
 }
+
