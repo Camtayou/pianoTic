@@ -13,10 +13,15 @@ class ScoreViewModel private constructor() : ViewModel() {
         timer = Timer()
         timer?.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-                score.postValue((score.value ?: 0) + 1)
-                PlayerStats.Companion.totalScore += 1
+                addScore(1)
             }
         }, 0, 1000)
+    }
+
+    fun addScore(points: Int) {
+        val currentScore = score.value ?: 0
+        score.postValue(currentScore + points)
+        PlayerStats.Companion.totalScore += points
     }
 
     override fun onCleared() {
