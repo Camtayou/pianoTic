@@ -31,6 +31,13 @@ class PhotoAlbum : Fragment() {
         photoContainer2.addView(photos[1].imageView)
         photoContainer3.addView(photos[2].imageView)
         photoContainer4.addView(photos[3].imageView)
+
+        // Update the background color and text color based on the current dark mode state
+        val layout = view.findViewById<ViewGroup>(R.id.photo_album)
+        DarkModeHandler().updateAllViews(DarkMode.isDarkMode, layout, requireContext())
+
+
+
     }
 
     override fun onCreateView(
