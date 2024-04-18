@@ -68,4 +68,11 @@ class PlayerStatsFragment : Fragment() {
 
         return view
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Update the background color and text color based on the current dark mode state
+        val layout = view.findViewById<ViewGroup>(R.id.stat)
+        DarkModeHandler().updateAllViews(DarkMode.isDarkMode, layout, requireContext())
+    }
 }
