@@ -1,0 +1,25 @@
+package com.example.pianotiles
+
+import android.content.Context
+import android.widget.RelativeLayout
+
+class UIManager(private val context: Context, private val pianoKeyContainers: List<RelativeLayout>) {
+    fun addPianoKeyToUI(pianoKey: PianoKey, columnIndex: Int) {
+        val pianoKeyContainer = pianoKeyContainers[columnIndex] as RelativeLayout
+
+        val keyHeight = pianoKey.keyHeight
+        val keyWidth = pianoKey.keyWidth
+
+        // Convert the height and width to pixels
+        val scale = context.resources.displayMetrics.density
+        val heightInPx = (keyHeight * scale + 0.5f).toInt()
+        val widthInPx = (keyWidth * scale + 0.5f).toInt()
+
+        // Use the height and width to set the RelativeLayout.LayoutParams
+        val params = RelativeLayout.LayoutParams(widthInPx, heightInPx)
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP)
+        pianoKey.layoutParams = params
+
+        pianoKeyContainer.addView(pianoKey)
+    }
+}
