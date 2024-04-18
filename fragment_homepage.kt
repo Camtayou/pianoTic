@@ -14,30 +14,13 @@ import android.widget.TextView
 import androidx.core.view.forEach
 import androidx.core.content.ContextCompat
 import android.service.autofill.Validators.and
+import android.content.Context
 
 
-fun ViewGroup.updateTextColor(color: Int) {
-    for (i in 0 until childCount) {
-        val child = getChildAt(i)
-        if (child is TextView && child !is Button) {
-            child.setTextColor(color)
-        } else if (child is ViewGroup) {
-            child.updateTextColor(color)
-        }
-    }
-}
+
 
 class Fragment_homepage : Fragment() {
-    private val darkModeObserver = object : DarkModeObserver {
-        override fun onDarkModeChanged(isDarkMode: Boolean) {
-            val layout = view?.findViewById<LinearLayout>(R.id.homepage)
-            val textColor = if (isDarkMode) ContextCompat.getColor(requireContext(), R.color.white) else ContextCompat.getColor(requireContext(), R.color.black)
-            val backgroundColor = if (isDarkMode) ContextCompat.getColor(requireContext(), R.color.black) else ContextCompat.getColor(requireContext(), R.color.white)
 
-            layout?.setBackgroundColor(backgroundColor)
-            layout?.updateTextColor(textColor)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,19 +54,17 @@ class Fragment_homepage : Fragment() {
         }
 
 
+        val btn_darkmode = view.findViewById<Button>(R.id.btn_darkmode)
+        // Update the background color based on the current dark mode state
+        val layout1 = view.findViewById<ViewGroup>(R.id.homepage)
 
-        val btnDarkMode = view.findViewById<Button>(R.id.btn_darkmode)
-        btnDarkMode.setOnClickListener {
-            // Changer le mode sombre ici
+        DarkModeHandler().updateAllViews(DarkMode.isDarkMode, layout1, requireContext())
+
+        btn_darkmode.setOnClickListener {
             DarkMode.toggle()
+            DarkModeHandler().updateAllViews(DarkMode.isDarkMode, layout1, requireContext())
         }
-
-        // Ajouter l'observateur ici
-        DarkMode.addObserver(darkModeObserver)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        DarkMode.removeObserver(darkModeObserver)
     }
 }
+
+
