@@ -5,9 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/fonddecran"
+    android:id="@+id/gamecolonne_fragment"
+    >
+
 
     <LinearLayout
+        android:id="@+id/colonnes"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="10"
@@ -69,4 +74,5 @@
 
     </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>
