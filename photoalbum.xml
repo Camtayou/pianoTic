@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingVertical="9sp"
+    android:background="@color/white"
+    android:id="@+id/photo_album"
     >
     <TextView
         android:layout_width="match_parent"
