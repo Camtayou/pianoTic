@@ -9,6 +9,13 @@ class PlayerStats {
         var totalTimePlayed: Int = 0
         var profilePhoto: Drawable? = null
         var profileName: String? = null
+
+        fun TotalKeyPressed (){
+            totalPianoKeysPlayed++
+        }
+        fun TotalTimePlayed (){
+            totalTimePlayed++
+        }
     }
 
 }
