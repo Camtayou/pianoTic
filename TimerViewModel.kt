@@ -21,7 +21,7 @@ class TimerViewModel : ViewModel() {
                 delay(1000)
                 val currentValue = _timer.value ?: 0
                 _timer.value = currentValue + 1
-                Companion.totalTimePlayed += 1
+                Companion.TotalTimePlayed()
             }
         }
     }
