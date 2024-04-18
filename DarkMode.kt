@@ -11,17 +11,13 @@ object DarkMode {
         notifyObservers() // Notify observers about the change
     }
 
-    fun addObserver(observer: DarkModeObserver) {
-        observers.add(observer)
-    }
 
-    fun removeObserver(observer: DarkModeObserver) {
-        observers.remove(observer)
-    }
 
     private fun notifyObservers() {
         observers.forEach { it.onDarkModeChanged(isDarkMode) }
     }
+
+
 }
 
 interface DarkModeObserver {
