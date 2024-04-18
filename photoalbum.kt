@@ -16,10 +16,10 @@ class PhotoAlbum : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         photos = listOf(
-            library(requireActivity(), "Carmel", R.drawable.phototayou),
-            library(requireActivity(), "Komil", R.drawable.photosamadov),
-            library(requireActivity(), "Gabriel", R.drawable.photofallik),
-            library(requireActivity(), "Bersini", R.drawable.photobersini)
+            library(requireActivity(), "Mario", R.drawable.photomario),
+            library(requireActivity(), "Luigi", R.drawable.photoluigi),
+            library(requireActivity(), "Peach", R.drawable.photopeach),
+            library(requireActivity(), "Yoshi", R.drawable.photoyoshi)
         )
 
         val photoContainer1 = view.findViewById<LinearLayout>(R.id.photo_container1)
