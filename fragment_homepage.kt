@@ -66,5 +66,3 @@ class Fragment_homepage : Fragment() {
         }
     }
 }
-
-
