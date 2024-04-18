@@ -1,0 +1,53 @@
+package com.example.pianotiles
+
+import android.content.Context
+
+class PianoKeyFactory(private val context: Context,
+                      private val scoreViewModel: ScoreViewModel,
+                      private val gameOverListener: GameOverListener) {
+
+    fun createPianoKey(type: Int): PianoKey {
+        return when (type) {
+            in 0..6 -> PianoKey(
+                context,
+                null,
+                0,
+                100,
+                100,
+                R.drawable.touchepiano1,
+                -1000f,
+                3000f,
+                scoreViewModel,
+                null,
+                gameOverListener)
+            in 7..8 -> pianokey_long(
+                context,
+                null,
+                0,
+                100,
+                200,
+                R.drawable.touchepiano2,
+                -1000f,
+                3000f,
+                scoreViewModel,
+                null,
+                gameOverListener, // Pass MainActivity as GameOverListener
+                2
+            )
+            else -> pianokey_special(
+                context,
+                null,
+                0,
+                100,
+                -1000f,
+                100,
+                R.drawable.touchepiano3,
+                3000f,
+                scoreViewModel,
+                null,
+                gameOverListener,
+                R.raw.sonpiano1
+            )
+        }
+    }
+}
