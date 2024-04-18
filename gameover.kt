@@ -21,7 +21,14 @@ class gameover : Fragment(){
         }
         return view
     }
+    // Pour le darkmode
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        // Update the background color and text color based on the current dark mode state
+        val layout = view.findViewById<ViewGroup>(R.id.gameover_fragment)
+        DarkModeHandler().updateAllViews(DarkMode.isDarkMode, layout, requireContext())
+    }
     companion object {
         fun newInstance(): gameover {
             return gameover()
