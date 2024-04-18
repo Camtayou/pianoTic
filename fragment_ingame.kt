@@ -90,7 +90,7 @@ open class Fragmentingame : Fragment(), GameOverListener {
         // Mettre en pause et reprendre le jeu
         val btnPause = view.findViewById<Button>(R.id.btn_pause)
         btnPause.setOnClickListener {
-            if (pianoKeyManager.isGameRunning) {
+            if (pianoKeyManager.isGameRunning()) {
                 pianoKeyManager.pauseGame()
                 mediaPlayer?.pause()
                 timerViewModel.pauseTimer()
@@ -144,4 +144,3 @@ open class Fragmentingame : Fragment(), GameOverListener {
         mediaPlayer = null
     }
 }
-
