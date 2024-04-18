@@ -1,0 +1,24 @@
+package com.example.pianotiles
+
+import android.content.Context
+import android.media.MediaPlayer
+
+open class SoundManager(private val context: Context) {
+    private var mediaPlayer: MediaPlayer? = null
+
+    fun playSound(soundResource: Int) {
+        // Release any previous MediaPlayer
+        mediaPlayer?.release()
+
+        // Create a new MediaPlayer for the given sound resource
+        mediaPlayer = MediaPlayer.create(context, soundResource)
+
+        // Set a listener to release the MediaPlayer once the sound has finished playing
+        mediaPlayer?.setOnCompletionListener { mp ->
+            mp.release()
+        }
+
+        // Start playing the sound
+        mediaPlayer?.start()
+    }
+}
