@@ -2,11 +2,15 @@ package com.example.pianotiles
 
 import android.content.Context
 
+// Définition de la classe PianoKeyFactory
 class PianoKeyFactory(private val context: Context,
                       private val scoreViewModel: ScoreViewModel,
-                      private val gameOverListener: GameOverListener) {
+                      private val gameOverListener: GameOverListener,
+                      private val soundHandler: SoundHandler) {
 
+    // Méthode pour créer une touche de piano
     fun createPianoKey(type: Int): PianoKey {
+        // Retourne une instance de PianoKey, pianokey_long ou pianokey_special en fonction du type
         return when (type) {
             in 0..6 -> PianoKey(
                 context,
@@ -19,7 +23,9 @@ class PianoKeyFactory(private val context: Context,
                 3000f,
                 scoreViewModel,
                 null,
-                gameOverListener)
+                gameOverListener,
+                soundHandler
+            )
             in 7..8 -> pianokey_long(
                 context,
                 null,
@@ -31,8 +37,9 @@ class PianoKeyFactory(private val context: Context,
                 3000f,
                 scoreViewModel,
                 null,
-                gameOverListener, // Pass MainActivity as GameOverListener
-                2
+                gameOverListener,
+                2,
+                soundHandler
             )
             else -> pianokey_special(
                 context,
@@ -46,7 +53,8 @@ class PianoKeyFactory(private val context: Context,
                 scoreViewModel,
                 null,
                 gameOverListener,
-                R.raw.sonpiano1
+                R.raw.sonpiano1,
+                soundHandler
             )
         }
     }
