@@ -7,38 +7,47 @@ import android.view.View
 import android.widget.Button
 import androidx.core.content.ContextCompat
 
-class gameover : Fragment(){
+// Définition de la classe gameover qui hérite de Fragment
+class gameover() : Fragment() {
+    // Méthode pour créer la vue du fragment
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate le layout pour ce fragment
         val view = inflater.inflate(R.layout.gameover, container, false)
 
+        // Définit un OnClickListener pour le bouton de retour à l'accueil
         view.findViewById<Button>(R.id.btn_gameoveraccueil).setOnClickListener {
+            // Remplace le fragment actuel par un Fragment_homepage
             fragmentManager?.beginTransaction()
                 ?.replace(R.id.fragment_container_view_tag, Fragment_homepage())
                 ?.commit()
         }
+        // Retourne la vue
         return view
     }
-    // Pour le darkmode
+
+    // Méthode appelée après que la vue du fragment a été créée
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Update the background color and text color based on the current dark mode state
+        // Met à jour la couleur de fond et la couleur du texte en fonction de l'état actuel du mode sombre
         val layout = view.findViewById<ViewGroup>(R.id.gameover_fragment)
         DarkModeHandler().updateAllViews(DarkMode.isDarkMode, layout, requireContext())
 
-        // Manually set the background color of the gameover screen based on the dark mode state
+        // Définit manuellement la couleur de fond de l'écran de fin de partie en fonction de l'état du mode sombre
         if (DarkMode.isDarkMode) {
-            val darkColor = ContextCompat.getColor(requireContext(), R.color.black) // Replace 'dark_mode_color' with your actual color resource name for dark mode
+            val darkColor = ContextCompat.getColor(requireContext(), R.color.black)
             layout.setBackgroundColor(darkColor)
         } else {
-            val lightColor = ContextCompat.getColor(requireContext(), R.color.white) // Replace 'light_mode_color' with your actual color resource name for light mode
+            val lightColor = ContextCompat.getColor(requireContext(), R.color.white)
             layout.setBackgroundColor(lightColor)
         }
     }
+
+    // Méthode statique pour créer une nouvelle instance de gameover
     companion object {
         fun newInstance(): gameover {
             return gameover()
