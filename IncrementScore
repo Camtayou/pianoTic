@@ -1,5 +1,8 @@
 package com.example.pianotiles
 
+
+// Définition de l'interface IncrementScore
 interface IncrementScore {
+    // Déclaration de la méthode AddScore qui sera appelée pour incrémenter le score
     fun AddScore()
 }
