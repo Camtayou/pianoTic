@@ -1,0 +1,7 @@
+package com.example.pianotiles
+
+// Définition de l'interface SoundHandlerProvider
+interface SoundHandlerProvider {
+    // Déclaration de la méthode getSoundHandler
+    fun getSoundHandler(): SoundHandler
+}
