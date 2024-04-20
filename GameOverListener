@@ -1,5 +1,7 @@
 package com.example.pianotiles
 
+// Définition de l'interface GameOverListener
 interface GameOverListener {
+        // Déclaration de la méthode onGameOver qui sera appelée lorsque le jeu est terminé
         fun onGameOver()
 }
