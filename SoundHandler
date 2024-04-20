@@ -1,0 +1,7 @@
+package com.example.pianotiles
+
+// Définition de l'interface SoundHandler
+interface SoundHandler {
+    // Déclaration de la méthode playSound qui prend un entier (référence à une ressource sonore) en paramètre
+    fun playSound(soundResource: Int)
+}
