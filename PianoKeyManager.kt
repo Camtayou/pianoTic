@@ -5,23 +5,30 @@ import android.os.Looper
 import kotlin.random.Random
 import android.widget.RelativeLayout
 
+// Définition de la classe PianoKeyManager
 class PianoKeyManager(private val context: Context,
                       private val pianoKeyContainers: List<RelativeLayout>,
                       private val scoreViewModel: ScoreViewModel,
                       private val gameOverListener: GameOverListener,
+                      private val soundHandler: SoundHandler,
                       private val pianoKeys: MutableList<PianoKey> = mutableListOf()) {
 
+    // Initialisation des gestionnaires
     private val uiManager = UIManager(context, pianoKeyContainers)
-    private val pianoKeyFactory = PianoKeyFactory(context, scoreViewModel, gameOverListener)
+    private val pianoKeyFactory = PianoKeyFactory(context, scoreViewModel, gameOverListener, soundHandler)
     private val gameStateManager = GameStateManager(this)
+
+    // Méthode pour vérifier si le jeu est en cours
     fun isGameRunning(): Boolean {
         return gameStateManager.isGameRunning
     }
 
+    // Méthode pour démarrer la génération des touches de piano
     fun startGeneratingPianoKeys() {
         gameStateManager.startGame()
     }
 
+    // Méthode pour mettre le jeu en pause
     fun pauseGame() {
         gameStateManager.pauseGame()
         pianoKeys.forEach { pianoKey: PianoKey ->
@@ -30,6 +37,7 @@ class PianoKeyManager(private val context: Context,
         }
     }
 
+    // Méthode pour reprendre le jeu
     fun resumeGame() {
         gameStateManager.resumeGame()
         pianoKeys.forEach { pianoKey: PianoKey ->
@@ -38,6 +46,7 @@ class PianoKeyManager(private val context: Context,
         }
     }
 
+    // Méthode pour créer une touche de piano dans une colonne aléatoire
     fun createPianoKeyInRandomColumn() {
         if (gameStateManager.isGameRunning) {
             var randomColumnIndex: Int
@@ -47,13 +56,13 @@ class PianoKeyManager(private val context: Context,
 
             gameStateManager.lastColumnIndex = randomColumnIndex
 
-            // Créer une instance de l'une des trois sous-classes en fonction d'un nombre aléatoire
+            // Crée une instance de l'une des trois sous-classes en fonction d'un nombre aléatoire
             val pianoKey = pianoKeyFactory.createPianoKey(Random.nextInt(10))
 
-            // Pour lorsqu'on est en pause
+            // Ajoute la touche de piano à la liste de touches de piano
             pianoKeys.add(pianoKey)
 
-            // Ajouter la touche de piano à l'interface utilisateur
+            // Ajoute la touche de piano à l'interface utilisateur
             uiManager.addPianoKeyToUI(pianoKey, randomColumnIndex)
         }
     }
