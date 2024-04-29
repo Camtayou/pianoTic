@@ -11,7 +11,7 @@ import kotlinx.coroutines.Job
 import com.example.pianotiles.PlayerStats.Companion
 
 // Définition de la classe TimerViewModel qui hérite de ViewModel
-class TimerViewModel : ViewModel() {
+class TimerViewModel : ViewModel(), TimerOn {
     // Déclaration de la variable _timer en tant que MutableLiveData
     private val _timer = MutableLiveData<Int>(0)
     // Déclaration de la variable timer qui est une LiveData
@@ -20,7 +20,7 @@ class TimerViewModel : ViewModel() {
     private var timerJob: Job? = null
 
     // Méthode pour démarrer le timer
-    fun startTimer() {
+    override fun startTimer() {
         timerJob = CoroutineScope(Dispatchers.Main).launch {
             while (true) {
                 delay(1000)
