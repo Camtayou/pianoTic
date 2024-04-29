@@ -23,15 +23,13 @@ open class PianoKey(context: Context,
                     protected var position_Y: Float,
                     protected var vitesse: Float,
                     protected val scoreViewModel: ScoreViewModel,
-                    private var animator: ObjectAnimator? = null,
                     private val gameOverListener: GameOverListener,
-                    protected val soundHandler: SoundHandler? = null
-) : AppCompatImageView(context, attrs, defStyleAttr), IncrementScore {
+) : AppCompatImageView(context, attrs, defStyleAttr) {
     private val scale = context.resources.displayMetrics.density
     private val params = LayoutParams((keyWidth * scale + 0.5f).toInt(), (keyHeight * scale + 0.5f).toInt())
     private val pianoKeyAnimator = PianoKeyAnimator(this, gameOverListener)
 
-    // Initialisation du PianoKey
+    // Initialisartion du PianoKey
     init {
         this.setImageResource(keyImageResource)
         this.layoutParams = params
@@ -41,7 +39,6 @@ open class PianoKey(context: Context,
         this.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                val width = this@PianoKey.width
                 this@PianoKey.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
@@ -56,16 +53,12 @@ open class PianoKey(context: Context,
         pianoKeyAnimator.resumeAnimation()
     }
 
-    // Méthode pour ajouter le score
-    override fun AddScore() {
-        scoreViewModel.addScore(10)
-    }
 
     // Méthode pour définir le listener du PianoKey
     open fun setPianoKeyListener() {
         this.setOnClickListener {
             (this@PianoKey.parent as ViewGroup).removeView(this@PianoKey)
-            AddScore()
+            scoreViewModel.addScore(10)
             Companion.TotalKeyPressed()
         }
     }
@@ -90,12 +83,10 @@ class pianokey_long(context: Context,
                     position_Y: Float,
                     vitesse: Float,
                     scoreViewModel: ScoreViewModel,
-                    animator: ObjectAnimator? = null,
                     gameOverListener : GameOverListener,
                     private var clicksRequired: Int,
-                    soundHandler : SoundHandler
 ) : PianoKey(context, attrs, defStyleAttr, keyWidth,keyHeight,
-    keyImageResource, position_Y, vitesse, scoreViewModel, animator, gameOverListener) {
+    keyImageResource, position_Y, vitesse, scoreViewModel, gameOverListener) {
 
     // Redéfinition de la méthode setPianoKeyListener
     override fun setPianoKeyListener() {
@@ -103,9 +94,10 @@ class pianokey_long(context: Context,
             lowerClicksRequired()
             if (clicksRequired == 0) {
                 (this@pianokey_long.parent as ViewGroup).removeView(this@pianokey_long)
-                AddScore()
+                scoreViewModel.addScore(30)
                 Companion.TotalKeyPressed()
             }
+
         }
     }
 
@@ -114,10 +106,6 @@ class pianokey_long(context: Context,
         clicksRequired--
     }
 
-    // Redéfinition de la méthode AddScore
-    override fun AddScore() {
-        scoreViewModel.addScore(30)
-    }
 }
 
 // Définition de la classe pianokey_special qui hérite de PianoKey
@@ -130,28 +118,22 @@ class pianokey_special(context: Context,
                        keyImageResource: Int,
                        vitesse: Float,
                        scoreViewModel: ScoreViewModel,
-                       animator: ObjectAnimator? = null,
                        gameOverListener: GameOverListener,
-                       private var soundResource: Int,
-                       soundHandler: SoundHandler
+                       private var soundResource: Int
 ) : PianoKey(context, attrs, defStyleAttr, keyWidth, keyHeight,
-    keyImageResource,position_Y, vitesse, scoreViewModel, animator, gameOverListener, soundHandler) {
-    private var mediaPlayer: MediaPlayer? = null
+    keyImageResource,position_Y, vitesse, scoreViewModel, gameOverListener) {
+    private val soundManager = SoundManager(context)
 
     // Redéfinition de la méthode setPianoKeyListener
     override fun setPianoKeyListener() {
         this.setOnClickListener {
             (this@pianokey_special.parent as ViewGroup).removeView(this@pianokey_special)
-            AddScore()
-            soundHandler?.playSound(soundResource)
+            scoreViewModel.addScore(50)
+            soundManager.playSound(soundResource)
             Companion.TotalKeyPressed()
         }
     }
 
-    // Redéfinition de la méthode AddScore
-    override fun AddScore() {
-        scoreViewModel.addScore(50)
-    }
 }
 
 
