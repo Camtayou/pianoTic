@@ -23,14 +23,11 @@ import android.content.Context
 // Définition de la classe Fragmentingame qui hérite de Fragment et implémente GameOverListener
 open class Fragmentingame() : Fragment(), GameOverListener {
     // Déclaration des variables
-    private var compteur = 0
     private lateinit var timerViewModel: TimerViewModel
     private lateinit var tvTime: TextView
     private lateinit var scoreViewModel: ScoreViewModel
     private lateinit var tvScore: TextView
     private var mediaPlayer: MediaPlayer? = null
-    private lateinit var pianoKeyManager: PianoKeyManager
-    private lateinit var soundHandler: SoundHandler
 
     // Méthode pour créer la vue du fragment
     override fun onCreateView(
@@ -79,7 +76,7 @@ open class Fragmentingame() : Fragment(), GameOverListener {
         //soundHandler = SoundManager(context!!)
 
         // Crée un nouveau PianoKeyManager
-        val pianoKeyManager = PianoKeyManager(requireContext(), pianoKeyContainers, scoreViewModel, this, soundHandler )
+        val pianoKeyManager = PianoKeyManager(requireContext(), pianoKeyContainers, scoreViewModel, this)
 
         // Commence à générer des touches de piano
         pianoKeyManager.startGeneratingPianoKeys()
@@ -94,7 +91,7 @@ open class Fragmentingame() : Fragment(), GameOverListener {
         tvScore = view.findViewById(R.id.tv_score)
 
         // Commence le timer du score
-        scoreViewModel.startScoreTimer()
+        scoreViewModel.startTimer()
 
         // Crée et démarre le MediaPlayer
         mediaPlayer = MediaPlayer.create(context, R.raw.takeoff)
@@ -160,7 +157,7 @@ open class Fragmentingame() : Fragment(), GameOverListener {
         mediaPlayer = null
     }
 
-    // Méthode appelée lorsque le fragment est attaché à un contexte
+    /* Méthode appelée lorsque le fragment est attaché à un contexte
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -173,4 +170,6 @@ open class Fragmentingame() : Fragment(), GameOverListener {
             throw RuntimeException("$context must implement SoundHandlerProvider")
         }
     }
+
+     */
 }
