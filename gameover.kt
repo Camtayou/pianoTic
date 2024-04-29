@@ -47,10 +47,5 @@ class gameover() : Fragment() {
         }
     }
 
-    // Méthode statique pour créer une nouvelle instance de gameover
-    companion object {
-        fun newInstance(): gameover {
-            return gameover()
-        }
-    }
+
 }
