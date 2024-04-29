@@ -48,7 +48,6 @@ class Fragment_homepage() : Fragment() {
         // Définit un OnClickListener pour le bouton de musique
         view.findViewById<Button>(R.id.musicClique1).setOnClickListener {
             // Crée un nouveau SoundManager
-            val soundHandler = SoundManager(requireContext())
             // Remplace le fragment actuel par un Fragmentingame
             fragmentManager?.beginTransaction()
                 ?.replace(R.id.fragment_container_view_tag, Fragmentingame())
