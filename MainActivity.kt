@@ -10,13 +10,11 @@ import android.view.LayoutInflater
 import androidx.fragment.app.FragmentManager
 
 // Définition de la classe MainActivity qui hérite de AppCompatActivity, implémente GameOverListener et SoundHandlerProvider
-class MainActivity : AppCompatActivity(), GameOverListener, SoundHandlerProvider {
+class MainActivity : AppCompatActivity(), GameOverListener {
     // Déclaration des variables
     private lateinit var fragmentContainer: FragmentContainerView
     private lateinit var fragmentManager: FragmentManager
     private lateinit var gameOverFragment: Fragment
-    private val soundHandler = SoundManager(this)
-
     // Méthode appelée lors de la création de l'activité
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +53,4 @@ class MainActivity : AppCompatActivity(), GameOverListener, SoundHandlerProvider
     }
 
     // Méthode pour obtenir le gestionnaire de son
-    override fun getSoundHandler(): SoundHandler {
-        return soundHandler
-    }
 }
