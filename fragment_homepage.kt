@@ -5,19 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import com.example.pianotiles.PlayerStats.Companion
-import android.widget.ImageView
-import android.graphics.Color
+import android.widget.LinearLayout
+import androidx.lifecycle.ViewModelProvider
 import android.widget.TextView
-import androidx.core.view.forEach
+import android.media.MediaPlayer
+import android.widget.Chronometer
+import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
-import android.service.autofill.Validators.and
+import androidx.lifecycle.ViewModel
+import java.util.TimerTask
+import java.util.Timer
+import androidx.lifecycle.Observer
 import android.content.Context
 
-// Définition de la classe Fragment_homepage qui hérite de Fragment
-class Fragment_homepage() : Fragment() {
+// Définition de la classe Fragmentingame qui hérite de Fragment et implémente GameOverListener
+open class Fragmentingame() : Fragment(), GameOverListener {
+    // Déclaration des variables
+    private lateinit var timerViewModel: TimerViewModel
+    private lateinit var tvTime: TextView
+    private lateinit var scoreViewModel: ScoreViewModel
+    private lateinit var tvScore: TextView
+    private var mediaPlayer: MediaPlayer? = null
 
     // Méthode pour créer la vue du fragment
     override fun onCreateView(
@@ -26,55 +36,140 @@ class Fragment_homepage() : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate le layout pour ce fragment
-        return inflater.inflate(R.layout.homepage, container, false)
+        val view = inflater.inflate(R.layout.ingame, container, false)
+
+        // Définit un OnClickListener pour le bouton de retour
+        view.findViewById<Button>(R.id.btn_arriere).setOnClickListener {
+            // Remplace le fragment actuel par un Fragment_homepage
+            fragmentManager?.beginTransaction()
+                ?.replace(R.id.fragment_container_view_tag, Fragment_homepage())
+                ?.commit()
+        }
+
+        // Code pour le chronomètre
+        tvTime = view.findViewById<TextView>(R.id.tv_time)
+
+        // Obtient une instance de TimerViewModel
+        timerViewModel = ViewModelProvider(this).get(TimerViewModel::class.java)
+
+        // Observe les changements de la valeur du timer
+        timerViewModel.timer.observe(viewLifecycleOwner, { time ->
+            // Met à jour le texte du chronomètre
+            tvTime.text = "Time : " +((time - time % 60) / 60).toString() + " : " + (time % 60).toString()
+        })
+
+        // Démarre le timer
+        timerViewModel.startTimer()
+
+        // Code pour générer les touches de piano
+        val pianoKeyContainers = listOf(
+            view.findViewById<RelativeLayout>(R.id.pianoKeyContainer1),
+            view.findViewById<RelativeLayout>(R.id.pianoKeyContainer2),
+            view.findViewById<RelativeLayout>(R.id.pianoKeyContainer3),
+            view.findViewById<RelativeLayout>(R.id.pianoKeyContainer4)
+        )
+
+        // Obtient une instance de ScoreViewModel
+        scoreViewModel = ViewModelProvider(this).get(ScoreViewModel::class.java)
+
+        // Crée un nouveau SoundManager
+        //soundHandler = SoundManager(context!!)
+
+        // Crée un nouveau PianoKeyManager
+        val pianoKeyManager = PianoKeyManager(requireContext(), pianoKeyContainers, scoreViewModel, this)
+
+        // Commence à générer des touches de piano
+        pianoKeyManager.startGeneratingPianoKeys()
+
+        // Observe les changements du score
+        scoreViewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
+            // Met à jour l'interface utilisateur avec le nouveau score
+            tvScore.text = "Score : $newScore"
+        })
+
+        // Récupère la vue du score
+        tvScore = view.findViewById(R.id.tv_score)
+
+        // Commence le timer du score
+        scoreViewModel.startTimer()
+
+        // Crée et démarre le MediaPlayer
+        mediaPlayer = MediaPlayer.create(context, R.raw.takeoff)
+        mediaPlayer?.start()
+
+        // Met en pause et reprend le jeu
+        val btnPause = view.findViewById<Button>(R.id.btn_pause)
+        btnPause.setOnClickListener {
+            if (pianoKeyManager.isGameRunning()) {
+                pianoKeyManager.pauseGame()
+                mediaPlayer?.pause()
+                timerViewModel.pauseTimer()
+                scoreViewModel.pauseScoreTimer()
+            } else {
+                pianoKeyManager.resumeGame()
+                mediaPlayer?.start()
+                timerViewModel.resumeTimer()
+                scoreViewModel.resumeScoreTimer()
+            }
+        }
+
+        // Retourne la vue
+        return view
     }
 
     // Méthode appelée après que la vue du fragment a été créée
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Récupère le conteneur de la photo de profil
-        val photoContainer1 = view.findViewById<LinearLayout>(R.id.container_profile1)
-        // Si une photo de profil a été définie,
-        if (Companion.profilePhoto != null) {
-            // Crée une nouvelle ImageView et lui attribue la photo de profil
-            val imageView = ImageView(context).apply {
-                setImageDrawable(Companion.profilePhoto)
+        // Met à jour la couleur de fond et la couleur du texte en fonction de l'état actuel du mode sombre
+        val layout = view.findViewById<ViewGroup>(R.id.ingamepaccomplet)
+        DarkModeHandler().updateAllViews(DarkMode.isDarkMode, layout, requireContext())
+    }
+
+    // Méthode appelée lorsque le jeu est terminé
+    override fun onGameOver() {
+        // Remplace le fragment actuel par un gameover
+        fragmentManager?.beginTransaction()
+            ?.replace(R.id.fragment_container_view_tag, gameover())
+            ?.commit()
+    }
+
+    // Méthode appelée lorsque le fragment est repris
+    override fun onResume() {
+        super.onResume()
+
+        // Met à jour le score toutes les secondes
+        Timer().scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                activity?.runOnUiThread {
+                    tvScore.text = "Score : " + scoreViewModel.score.value.toString()
+                }
             }
-            // Ajoute l'ImageView au conteneur de la photo de profil
-            photoContainer1.addView(imageView)
-        }
+        }, 0, 1000)
+    }
 
-        // Définit un OnClickListener pour le bouton de musique
-        view.findViewById<Button>(R.id.musicClique1).setOnClickListener {
-            // Crée un nouveau SoundManager
-            // Remplace le fragment actuel par un Fragmentingame
-            fragmentManager?.beginTransaction()
-                ?.replace(R.id.fragment_container_view_tag, Fragmentingame())
-                ?.commit()
-        }
+    // Méthode appelée lorsque le fragment est détruit
+    override fun onDestroy() {
+        super.onDestroy()
 
-        // Définit un OnClickListener pour le bouton des statistiques
-        view.findViewById<Button>(R.id.btn_stats).setOnClickListener {
-            // Remplace le fragment actuel par un PlayerStatsFragment
-            fragmentManager?.beginTransaction()
-                ?.replace(R.id.fragment_container_view_tag, PlayerStatsFragment())
-                ?.commit()
-        }
+        // Libère la ressource lorsque vous avez terminé avec elle
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
 
-        // Récupère le bouton du mode sombre
-        val btn_darkmode = view.findViewById<Button>(R.id.btn_darkmode)
-        // Récupère le layout de la page d'accueil
-        val layout1 = view.findViewById<ViewGroup>(R.id.homepage)
-        // Met à jour toutes les vues en fonction de l'état actuel du mode sombre
-        DarkModeHandler().updateAllViews(DarkMode.isDarkMode, layout1, requireContext())
+    /* Méthode appelée lorsque le fragment est attaché à un contexte
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
 
-        // Définit un OnClickListener pour le bouton du mode sombre
-        btn_darkmode.setOnClickListener {
-            // Bascule l'état du mode sombre
-            DarkMode.toggle()
-            // Met à jour toutes les vues en fonction du nouvel état du mode sombre
-            DarkModeHandler().updateAllViews(DarkMode.isDarkMode, layout1, requireContext())
+        // Vérifie si le contexte est un SoundHandlerProvider
+        if (context is SoundHandlerProvider) {
+            // Obtient le SoundHandler du SoundHandlerProvider
+            soundHandler = context.getSoundHandler()
+        } else {
+            // Lance une exception si le contexte n'est pas un SoundHandlerProvider
+            throw RuntimeException("$context must implement SoundHandlerProvider")
         }
     }
+
+     */
 }
