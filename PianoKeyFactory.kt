@@ -5,8 +5,7 @@ import android.content.Context
 // Définition de la classe PianoKeyFactory
 class PianoKeyFactory(private val context: Context,
                       private val scoreViewModel: ScoreViewModel,
-                      private val gameOverListener: GameOverListener,
-                      private val soundHandler: SoundHandler) {
+                      private val gameOverListener: GameOverListener) {
 
     // Méthode pour créer une touche de piano
     fun createPianoKey(type: Int): PianoKey {
@@ -22,9 +21,7 @@ class PianoKeyFactory(private val context: Context,
                 -1000f,
                 3000f,
                 scoreViewModel,
-                null,
                 gameOverListener,
-                soundHandler
             )
             in 7..8 -> pianokey_long(
                 context,
@@ -36,10 +33,8 @@ class PianoKeyFactory(private val context: Context,
                 -1000f,
                 3000f,
                 scoreViewModel,
-                null,
                 gameOverListener,
-                2,
-                soundHandler
+                2
             )
             else -> pianokey_special(
                 context,
@@ -51,10 +46,8 @@ class PianoKeyFactory(private val context: Context,
                 R.drawable.touchepiano3,
                 3000f,
                 scoreViewModel,
-                null,
                 gameOverListener,
-                R.raw.sonpiano1,
-                soundHandler
+                R.raw.sonpiano1
             )
         }
     }
