@@ -10,12 +10,11 @@ class PianoKeyManager(private val context: Context,
                       private val pianoKeyContainers: List<RelativeLayout>,
                       private val scoreViewModel: ScoreViewModel,
                       private val gameOverListener: GameOverListener,
-                      private val soundHandler: SoundHandler,
                       private val pianoKeys: MutableList<PianoKey> = mutableListOf()) {
 
     // Initialisation des gestionnaires
     private val uiManager = UIManager(context, pianoKeyContainers)
-    private val pianoKeyFactory = PianoKeyFactory(context, scoreViewModel, gameOverListener, soundHandler)
+    private val pianoKeyFactory = PianoKeyFactory(context, scoreViewModel, gameOverListener)
     private val gameStateManager = GameStateManager(this)
 
     // Méthode pour vérifier si le jeu est en cours
