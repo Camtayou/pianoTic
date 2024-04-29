@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import java.util.*
 
 // Définition de la classe ScoreViewModel qui hérite de ViewModel
-class ScoreViewModel private constructor() : ViewModel() {
+class ScoreViewModel private constructor() : ViewModel(), TimerOn {
     // Déclaration de la variable score en tant que MutableLiveData
     var score: MutableLiveData<Int> = MutableLiveData(-1)
 
@@ -13,7 +13,7 @@ class ScoreViewModel private constructor() : ViewModel() {
     private var timer: Timer? = null
 
     // Méthode pour démarrer le timer de score
-    fun startScoreTimer() {
+    override fun startTimer() {
         timer = Timer()
         timer?.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
@@ -43,10 +43,11 @@ class ScoreViewModel private constructor() : ViewModel() {
 
     // Méthode pour reprendre le timer de score
     fun resumeScoreTimer() {
-        startScoreTimer()
+        startTimer()
     }
 
     // Objet compagnon pour le modèle singleton
+    /*
     companion object {
         @Volatile
         private var INSTANCE: ScoreViewModel? = null
@@ -64,5 +65,5 @@ class ScoreViewModel private constructor() : ViewModel() {
                 return instance
             }
         }
-    }
+    }*/
 }
