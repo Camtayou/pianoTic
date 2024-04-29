@@ -1,0 +1,5 @@
+package com.example.pianotiles
+
+interface TimerOn {
+    fun startTimer()
+}
