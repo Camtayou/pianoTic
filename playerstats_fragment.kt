@@ -15,8 +15,6 @@ import com.example.pianotiles.PlayerStats.Companion
 
 // Définition de la classe PlayerStatsFragment qui hérite de Fragment
 class PlayerStatsFragment : Fragment() {
-    // Déclaration des variables
-    private var playerStats: PlayerStats = PlayerStats()
     private lateinit var tvTotalScore: TextView
     private lateinit var tvTotalTime: TextView
     private lateinit var tvTotalKeys: TextView
